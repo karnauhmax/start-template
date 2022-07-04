@@ -43,7 +43,7 @@ li {
   padding: 0;
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100%;
   font-size: 16px;
   font-family: var(--font-family, sans-serif);
 }
@@ -59,6 +59,9 @@ a {
   color: inherit;
 }
 
+.site-container {
+  overflow: hidden; // если используете на сайте position: sticky - уберите эту настройку
+}
 
 .is-hidden {
   display: none !important;
@@ -92,8 +95,8 @@ a {
 
 .container {
   margin: 0 auto;
-  max-width: 1900px;
-  padding: 0 15px;
+  max-width: 1240px;
+  padding: 0 20px;
 }
 
 .js-focus-visible :focus:not(.focus-visible) {
@@ -139,45 +142,4 @@ a {
 
 .locked {
   overflow: hidden;
-}
-
-.without-outline {
-  color: var(--secondary-color);
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-.title {
-  font-size: 24px;
-  font-weight: 700;
-}
-
-.btn {
-  min-width: 117px;
-  max-width: 180px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 16px;
-  transition: .5s all ease;
-}
-
-.btn-primary {
-  border-radius: 10px;
-  background-color: var(--dark-color);
-  color: var(--light-color);
-  border: 1px solid transparent;
-
-  &:hover {
-    background-color: transparent;
-    color: var(--dark-color);
-    border: 1px solid var(--dark-color);
-  }
-}
-
-select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  text-indent: 1px;
-  text-overflow: '';
 }
