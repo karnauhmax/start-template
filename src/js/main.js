@@ -63,7 +63,7 @@ const myStatsChart = new Chart(stats, {
         ticks: {
           color: "rgba(255, 255, 255, 0.8)",
           font: {
-            size: 12,
+            size: 13,
             weight: 700,
             family: "Space Grotesk",
           },
