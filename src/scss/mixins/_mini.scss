@@ -1,4 +1,7 @@
+@use "sass:math";
 /* stylelint-disable */
+
+
 
 @mixin bg-cover {
   background-position: center;
@@ -34,9 +37,9 @@
 
 $browser-context: 16; // Default
 
-@function rem($pixels, $context: $browser-context) {
-  @return #{$pixels/$context}rem;
-}
+// @function rem($pixels, $context: $browser-context) {
+//   @return #{$pixels/$context}rem;
+// }
 
 @mixin image-set($pathToImage) {
   background-image: url("#{$pathToImage}.jpg");

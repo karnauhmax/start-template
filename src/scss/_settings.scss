@@ -2,6 +2,7 @@ html {
   box-sizing: border-box;
 }
 
+
 *,
 *::before,
 *::after {
@@ -95,7 +96,7 @@ a {
 
 .container {
   margin: 0 auto;
-  max-width: 1240px;
+  max-width: 1440px;
   padding: 0 20px;
 }
 
@@ -142,4 +143,8 @@ a {
 
 .locked {
   overflow: hidden;
+}
+
+.second_div {
+  @include adaptiveValue(font-size, 48, 12, 1920, 1366, 1);
 }

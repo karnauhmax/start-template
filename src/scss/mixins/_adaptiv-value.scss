@@ -1,3 +1,9 @@
+@use "sass:math";
+
+$containerWidth: 1440;
+$maxWidth: 1920;
+$minWidth: 320;
+
 @mixin adaptiveValue($property, $startSize, $minSize, $widthFrom: $containerWidth, $widthTo: $minWidth, $keepSize: 0) {
 	@if ($startSize==0) {
 		$startSize: 0.000001;
