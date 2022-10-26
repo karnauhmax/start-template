@@ -28,6 +28,7 @@ const plumber = require("gulp-plumber");
 const path = require("path");
 const zip = require("gulp-zip");
 const rootFolder = path.basename(path.resolve());
+const critical = require("critical");
 
 // paths
 const srcFolder = "./src";
@@ -58,18 +59,6 @@ const svgSprites = () => {
       svgmin({
         js2svg: {
           pretty: true,
-        },
-      })
-    )
-    .pipe(
-      cheerio({
-        run: function ($) {
-          $("[fill]").removeAttr("fill");
-          $("[stroke]").removeAttr("stroke");
-          $("[style]").removeAttr("style");
-        },
-        parserOptions: {
-          xmlMode: true,
         },
       })
     )
@@ -243,7 +232,7 @@ const resources = () => {
 };
 
 const images = () => {
-  return src([`${paths.srcImgFolder}/**/**.{jpg,jpeg,png,svg}`])
+  return src([`${paths.srcImgFolder}/**/**.{jpg,jpeg,png,svg,gif}`])
     .pipe(
       gulpif(
         isProd,
@@ -291,6 +280,23 @@ const htmlInclude = () => {
     .pipe(browserSync.stream());
 };
 
+const criticalCss = (done) => {
+  // return src(buildFolder).pipe(() => {
+  //   critical.generate({
+  //     base: buildFolder,
+  //     src: "index.html",
+  //     dest: "app/index-critical.html",
+  //     minify: true,
+  //     width: 320,
+  //     height: 480,
+  //   });
+
+  //   done();
+  // });
+
+  return src(buildFolder);
+};
+
 const watchFiles = () => {
   browserSync.init({
     server: {
@@ -303,9 +309,8 @@ const watchFiles = () => {
   watch(`${paths.srcPartialsFolder}/*.html`, htmlInclude);
   watch(`${srcFolder}/*.html`, htmlInclude);
   watch(`${paths.resourcesFolder}/**`, resources);
-  watch(`${paths.srcImgFolder}/**/**.{jpg,jpeg,png,svg}`, images);
+  watch(`${paths.srcImgFolder}/**/**.{jpg,jpeg,png,svg,gif}`, images);
   watch(`${paths.srcImgFolder}/**/**.{jpg,jpeg,png}`, webpImages);
-  watch(`${paths.srcImgFolder}/**/**.{jpg,jpeg,png}`, avifImages);
   watch(paths.srcSvg, svgSprites);
 };
 
@@ -368,6 +373,40 @@ const toProd = (done) => {
   done();
 };
 
+const getCritical = (done) => {
+  critical.generate({
+    // Inline the generated critical-path CSS
+    // - true generates HTML
+    // - false generates CSS
+    inline: true,
+    // Your base directory
+    base: 'app/',
+    // HTML source file
+    src: 'index.html',
+    // Your CSS Files (optional)
+    css: ['css/main.css'],
+    // Viewport width
+    width: 1300,
+    // Viewport height
+    height: 900,
+    // Output results to file
+    target: {
+      // css: 'critical.css',
+      html: 'index.html',
+      // uncritical: 'css/uncritical.css',
+    },
+    // Extract inlined styles from referenced stylesheets
+    extract: true,
+    // ignore CSS rules
+    ignore: {
+      atrule: ['@font-face'],
+      // rule: [/some-regexp/],
+      // decl: (node, value) => /big-image\.png/.test(value),
+    },
+  });
+  done();
+}
+
 exports.default = series(
   clean,
   htmlInclude,
@@ -376,7 +415,6 @@ exports.default = series(
   resources,
   images,
   webpImages,
-  avifImages,
   svgSprites,
   watchFiles
 );
@@ -389,7 +427,6 @@ exports.backend = series(
   resources,
   images,
   webpImages,
-  avifImages,
   svgSprites
 );
 
@@ -402,9 +439,9 @@ exports.build = series(
   resources,
   images,
   webpImages,
-  avifImages,
   svgSprites,
-  htmlMinify
+  htmlMinify,
+  getCritical
 );
 
 exports.cache = series(cache, rewrite);
