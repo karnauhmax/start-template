@@ -17,7 +17,7 @@ const htmlmin = require("gulp-htmlmin");
 const gulpif = require("gulp-if");
 const notify = require("gulp-notify");
 const image = require("gulp-imagemin");
-const webphtml = require("gulp-webp-html");
+// const webphtml = require("gulp-webp-html");
 const { readFileSync } = require("fs");
 const typograf = require("gulp-typograf");
 const webp = require("gulp-webp");
@@ -29,6 +29,7 @@ const path = require("path");
 const zip = require("gulp-zip");
 const rootFolder = path.basename(path.resolve());
 const critical = require("critical");
+const webpHtml = require("gulp-webp-html-nosvg");
 
 // paths
 const srcFolder = "./src";
@@ -247,7 +248,8 @@ const images = () => {
         ])
       )
     )
-    .pipe(dest(paths.buildImgFolder));
+    .pipe(dest(paths.buildImgFolder))
+    .pipe(webpHtml());
 };
 
 const webpImages = () => {
@@ -380,11 +382,11 @@ const getCritical = (done) => {
     // - false generates CSS
     inline: true,
     // Your base directory
-    base: 'app/',
+    base: "app/",
     // HTML source file
-    src: 'index.html',
+    src: "index.html",
     // Your CSS Files (optional)
-    css: ['css/main.css'],
+    css: ["css/main.css"],
     // Viewport width
     width: 1300,
     // Viewport height
@@ -392,20 +394,20 @@ const getCritical = (done) => {
     // Output results to file
     target: {
       // css: 'critical.css',
-      html: 'index.html',
+      html: "index.html",
       // uncritical: 'css/uncritical.css',
     },
     // Extract inlined styles from referenced stylesheets
     extract: true,
     // ignore CSS rules
     ignore: {
-      atrule: ['@font-face'],
+      atrule: ["@font-face"],
       // rule: [/some-regexp/],
       // decl: (node, value) => /big-image\.png/.test(value),
     },
   });
   done();
-}
+};
 
 exports.default = series(
   clean,
